@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: amene-deployment
+spec:
+    replicas: 2
+    selector:
+       matchLabels:
+          app: hello-java-app
+    template:
+       metadata:
+          labels:
+             app: hello-java-app
+       spec:
+          containers:
+          - name: hello-java
+            image: kittzbiz/otus_arch20:v1
+            ports:
+              - name: web 
+                containerPort: 8080            
+            livenessProbe:
+              httpGet:
+                path: /health/
+                port: web
+              initialDelaySeconds: 10
+              periodSeconds: 5
+              timeoutSeconds: 2
+            readinessProbe:
+              httpGet:
+                path: /health/
+                port: web
+              initialDelaySeconds: 10
+              periodSeconds: 5 
